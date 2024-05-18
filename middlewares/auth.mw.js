@@ -68,7 +68,9 @@ const verifyToken = (req, res, next)=>{
     //we will chech, token is present in header
     const token = req.headers['x-access-token']
     if(!token){
-        return console.log("no token found! unAuthorised");
+        return res.status(201).send({
+            message:"no token found! unAuthorised"
+        });
     }
     //if it's a valid or not
     jwt.verify(token,secretCode.secret,async(err, decoded)=>{

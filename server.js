@@ -65,6 +65,9 @@ require("./routes/auth.routes")(app)// calling routes and passing app object
 //for category
 require("./routes/category.routes")(app)
 
+//for product
+require("./routes/product.routes")(app)
+
 
 
 /**
