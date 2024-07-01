@@ -68,6 +68,9 @@ require("./routes/category.routes")(app)
 //for product
 require("./routes/product.routes")(app)
 
+//for cart
+require("./routes/cart.routes")(app)
+
 
 
 /**
