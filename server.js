@@ -69,7 +69,7 @@ require("./src/routes/product.routes")(app);
 require("./src/routes/cart.routes")(app);
 
 app.get("/ecomm/api/v1", (req, res) => {
-  res.status.json({
+  res.status(200).json({
     message: " Backend is running...",
   });
 });
