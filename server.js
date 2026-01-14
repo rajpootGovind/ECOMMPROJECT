@@ -2,57 +2,54 @@
  * this is the staring file of the project.
  */
 
-const express = require("express")
-const mongoose = require("mongoose")
-const serverConfig=require("./config/server.config")
-const userModel= require("./models/user.model")
-const dbConfig =require("./config/db.config")
-const bcrypt = require("bcryptjs")
+const express = require("express");
+const mongoose = require("mongoose");
+const serverConfig = require("./src/config/server.config");
+const userModel = require("./src/models/user.model");
+const dbConfig = require("./src/config/db.config");
+const bcrypt = require("bcryptjs");
 
-const app = express()
+const app = express();
 
-app.use(express.json()) //middleware- for understatnd json format data bcz it understand only js object
-
-
+app.use(express.json()); //middleware- for understatnd json format data bcz it understand only js object
 
 /**
- * create an Admin user at the starting of the application 
+ * create an Admin user at the starting of the application
  * if already not present
  */
 
 /**
  * Connection with mongoDB database
  */
-mongoose.connect(dbConfig.dbURL)
-const db =mongoose.connection
+mongoose.connect(dbConfig.dbURL);
+const db = mongoose.connection;
 
-db.on("error",()=>{
-    console.log(`error while connecting to db: ${error}`);
-})
+db.on("error", () => {
+  console.log(`error while connecting to db: ${error}`);
+});
 
-db.once("open",()=>{
-     console.log("db connected successfully");
-     init()
-})
+db.once("open", () => {
+  console.log("db connected successfully");
+  init();
+});
 
-async function init(){
+async function init() {
   //check if user present or not.
-  let user =  await userModel.findOne({userID:"admin"})
-  if(user){
+  let user = await userModel.findOne({ userID: "admin" });
+  if (user) {
     console.log("Admin already present");
     return;
   }
-  try{
+  try {
     user = await userModel.create({
-        name:"Govind",
-        userID:"admin",
-        email: "hitgo@gmail.com",
-        userType:"ADMIN",
-        password:bcrypt.hashSync("welcome1",8)
-    })
-     console.log(`admin created ${user}`);
-
-  }catch(err){
+      name: "Govind",
+      userID: "admin",
+      email: "hitgo@gmail.com",
+      userType: "ADMIN",
+      password: bcrypt.hashSync("welcome1", 8),
+    });
+    console.log(`admin created ${user}`);
+  } catch (err) {
     console.log(`error during creating Admin ${err}`);
   }
 }
@@ -60,22 +57,26 @@ async function init(){
 /**
  * stich the route to the server
  */
-require("./routes/auth.routes")(app)// calling routes and passing app object
- 
+require("./src/routes/auth.routes")(app); // calling routes and passing app object
+
 //for category
-require("./routes/category.routes")(app)
+require("./src/routes/category.routes")(app);
 
 //for product
-require("./routes/product.routes")(app)
+require("./src/routes/product.routes")(app);
 
 //for cart
-require("./routes/cart.routes")(app)
+require("./src/routes/cart.routes")(app);
 
-
+app.get("/ecomm/api/v1", (req, res) => {
+  res.status.json({
+    message: " Backend is running...",
+  });
+});
 
 /**
  * start the server
  */
-app.listen(serverConfig.PORT,()=>{
-    console.log(`server is running on port no.:${serverConfig.PORT}`);
-})
+app.listen(serverConfig.PORT, () => {
+  console.log(`server is running on port no.:${serverConfig.PORT}`);
+});
